@@ -1,4 +1,5 @@
 #include <iostream>
+#include <SFML/Graphics.hpp>
 #include <vector>
 using namespace std;
 
@@ -9,11 +10,15 @@ enum piece_type {
 class piece {
 protected:
     string color, name, position;
+    sf::Texture piece_texture;
+    sf::Sprite piece_sprite;
 public:
     piece() {}
     string Get_Name();
     string Get_Color();
     string Get_Position();
+    sf::Sprite Get_Sprite();
+    void Remove_Sprite();
     virtual bool move(string pos, vector<piece*> piese) = 0;
     virtual piece_type return_type() = 0;
     virtual void False_EnPassant() = 0;
