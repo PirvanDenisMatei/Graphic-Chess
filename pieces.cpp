@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <SFML/Graphics.hpp>
 #include "pieces.h"
 
 class exceptie1 :public exception {
@@ -10,9 +11,19 @@ class exceptie1 :public exception {
     }
 };
 
+void pos_to_int(int& x, int& y, string pos)
+{
+    x = int(pos[0] - 'a');
+    x = x * 100;
+    y = int(pos[1] - '0');
+    y = 800 - y * 100;
+}
+
 string piece::Get_Color() { return color; }
 string piece::Get_Name() { return name; }
 string piece::Get_Position() { return position; }
+sf::Sprite piece::Get_Sprite() { return piece_sprite; }
+void piece::Remove_Sprite() { this->piece_sprite.move(-150, -150); }
 
 void ch_to_int(int& x, int& y, string pos)
 {
@@ -29,17 +40,28 @@ bool emptyness::move(string pos, vector<piece*> piese) { return false; }
 
 King::King(string culoare, string position) {
     color = culoare;
+    //cout << "Amogus" << endl;
+    string texture_file;
     if (culoare == "black")
     {
         this->position = position;
         name = "Black_King";
+        texture_file = "Assets/Black_King.png";
     }
     else
     {
         this->position = position;
         name = "White_King";
+        texture_file = "Assets/White_King.png";
     }
+
+    if (!this->piece_texture.loadFromFile(texture_file)) { cout << "Error: couldn't load tile sprite" << endl; }
+    this->piece_sprite.setTexture(piece_texture);
+    int x, y;
+    pos_to_int(x, y, this->position);
+    this->piece_sprite.setPosition(x, y);
 }
+
 bool King::move(string pos, vector<piece*> piese) {
     int x, y, X, Y;
     if (pos == "ghost")
@@ -57,6 +79,9 @@ bool King::move(string pos, vector<piece*> piese) {
     if (abs(X - x) <= 1 && abs(Y - y) <= 1)
     {
         position = pos;
+        //cout << x << " " << y << " King" << endl;
+        pos_to_int(x, y, this->position);
+        this->piece_sprite.setPosition(x, y);
         return true;
     }
     return false;
@@ -64,16 +89,26 @@ bool King::move(string pos, vector<piece*> piese) {
 
 Queen::Queen(string culoare, string position) {
     color = culoare;
+    string texture_file;
     if (culoare == "black")
     {
         this->position = position;
         name = "Black_Queen";
+        texture_file = "Assets/Black_Queen.png";
     }
     else
     {
         this->position = position;
         name = "White_Queen";
+        texture_file = "Assets/White_Queen.png";
     }
+
+    if (!this->piece_texture.loadFromFile(texture_file)) { cout << "Error: couldn't load tile sprite" << endl; }
+    this->piece_sprite.setTexture(piece_texture);
+    int x, y;
+    pos_to_int(x, y, this->position);
+    cout << x << " " << y << " Queen" << endl;
+    this->piece_sprite.setPosition(x, y);
 }
 bool Queen::move(string pos, vector<piece*> piese) {
     int x, y, X, Y, a, b, g, h;
@@ -116,6 +151,8 @@ bool Queen::move(string pos, vector<piece*> piese) {
                     }
                 }
         position = pos;
+        pos_to_int(x, y, this->position);
+        this->piece_sprite.setPosition(x, y);
         return true;
     }
     if (y == Y)
@@ -145,6 +182,8 @@ bool Queen::move(string pos, vector<piece*> piese) {
                     }
                 }
         position = pos;
+        pos_to_int(x, y, this->position);
+        this->piece_sprite.setPosition(x, y);
         return true;
     }
     if (abs(X - x) == abs(Y - y))
@@ -219,6 +258,8 @@ bool Queen::move(string pos, vector<piece*> piese) {
             }
         }
         position = pos;
+        pos_to_int(x, y, this->position);
+        this->piece_sprite.setPosition(x, y);
         return true;
     }
     return false;
@@ -226,17 +267,26 @@ bool Queen::move(string pos, vector<piece*> piese) {
 
 Bishop::Bishop(string nume, string culoare, string position) {
     color = culoare;
+    string texture_file;
     if (culoare == "black")
     {
         this->position = position;
         name = nume;
+        texture_file = "Assets/Black_Bishop.png";
     }
     else
     {
         this->position = position;
         name = nume;
+        texture_file = "Assets/White_Bishop.png";
     }
 
+    if (!this->piece_texture.loadFromFile(texture_file)) { cout << "Error: couldn't load tile sprite" << endl; }
+    this->piece_sprite.setTexture(piece_texture);
+    int x, y;
+    pos_to_int(x, y, this->position);
+    cout << x << " " << y << " Bishop" << endl;
+    this->piece_sprite.setPosition(x, y);
 }
 bool Bishop::move(string pos, vector<piece*> piese) {
     if (pos == "ghost")
@@ -324,6 +374,8 @@ bool Bishop::move(string pos, vector<piece*> piese) {
             }
         }
         position = pos;
+        pos_to_int(x, y, this->position);
+        this->piece_sprite.setPosition(x, y);
         return true;
     }
     return false;
@@ -331,16 +383,26 @@ bool Bishop::move(string pos, vector<piece*> piese) {
 
 Knight::Knight(string nume, string culoare, string position) {
     color = culoare;
+    string texture_file;
     if (culoare == "black")
     {
         this->position = position;
         name = nume;
+        texture_file = "Assets/Black_Knight.png";
     }
     else
     {
         this->position = position;
         name = nume;
+        texture_file = "Assets/White_Knight.png";
     }
+
+    if (!this->piece_texture.loadFromFile(texture_file)) { cout << "Error: couldn't load tile sprite" << endl; }
+    this->piece_sprite.setTexture(piece_texture);
+    int x, y;
+    pos_to_int(x, y, this->position);
+    cout << x << " " << y << " Knight" << endl;
+    this->piece_sprite.setPosition(x, y);
 }
 bool Knight::move(string pos, vector<piece*> piese) {
     if (pos == "ghost")
@@ -359,12 +421,16 @@ bool Knight::move(string pos, vector<piece*> piese) {
     if (abs(Y - y) == 2 && (abs(X - x) == 1))
     {
         position = pos;
+        pos_to_int(x, y, this->position);
+        this->piece_sprite.setPosition(x, y);
         return true;
     }
     else
         if (abs(X - x) == 2 && abs(Y - y) == 1)
         {
             position = pos;
+            pos_to_int(x, y, this->position);
+            this->piece_sprite.setPosition(x, y);
             return true;
         }
     return false;
@@ -372,16 +438,26 @@ bool Knight::move(string pos, vector<piece*> piese) {
 
 Rook::Rook(string nume, string culoare, string position) {
     color = culoare;
+    string texture_file;
     if (culoare == "black")
     {
         this->position = position;
         name = nume;
+        texture_file = "Assets/Black_Rook.png";
     }
     else
     {
         this->position = position;
         name = nume;
+        texture_file = "Assets/White_Rook.png";
     }
+
+    if (!this->piece_texture.loadFromFile(texture_file)) { cout << "Error: couldn't load tile sprite" << endl; }
+    this->piece_sprite.setTexture(piece_texture);
+    int x, y;
+    pos_to_int(x, y, this->position);
+    cout << x << " " << y << " Rook" << endl;
+    this->piece_sprite.setPosition(x, y);
 }
 bool Rook::move(string pos, vector<piece*> piese) {
     if (pos == "ghost")
@@ -424,6 +500,8 @@ bool Rook::move(string pos, vector<piece*> piese) {
                     }
                 }
         position = pos;
+        pos_to_int(x, y, this->position);
+        this->piece_sprite.setPosition(x, y);
         return true;
     }
     if (y == Y)
@@ -453,6 +531,8 @@ bool Rook::move(string pos, vector<piece*> piese) {
                     }
                 }
         position = pos;
+        pos_to_int(x, y, this->position);
+        this->piece_sprite.setPosition(x, y);
         return true;
     }
     return false;
@@ -460,18 +540,27 @@ bool Rook::move(string pos, vector<piece*> piese) {
 
 Pawn::Pawn(string nume, string culoare, string position) {
     color = culoare;
+    string texture_file;
     if (culoare == "black")
     {
         this->position = position;
         name = nume;
+        texture_file = "Assets/Black_Pawn.png";
     }
     else
     {
         this->position = position;
         name = nume;
+        texture_file = "Assets/White_Pawn.png";
     }
+
+    if (!this->piece_texture.loadFromFile(texture_file)) { cout << "Error: couldn't load tile sprite" << endl; }
+    this->piece_sprite.setTexture(piece_texture);
     has_moved = false;
     en_passant = false;
+    int x, y;
+    pos_to_int(x, y, this->position);
+    this->piece_sprite.setPosition(x, y);
 }
 
 bool Pawn::move(string pos, vector<piece*> piese) {
@@ -507,6 +596,8 @@ bool Pawn::move(string pos, vector<piece*> piese) {
                 en_passant = true;
                 has_moved = true;
                 position = pos;
+                pos_to_int(x, y, this->position);
+                this->piece_sprite.setPosition(x, y);
                 return true;
             }
         }
@@ -524,6 +615,8 @@ bool Pawn::move(string pos, vector<piece*> piese) {
             has_moved = true;
             en_passant = false;
             position = pos;
+            pos_to_int(x, y, this->position);
+            this->piece_sprite.setPosition(x, y);
             return true;
         }
         else
@@ -539,6 +632,8 @@ bool Pawn::move(string pos, vector<piece*> piese) {
                             has_moved = true;
                             en_passant = false;
                             position = pos;
+                            pos_to_int(x, y, this->position);
+                            this->piece_sprite.setPosition(x, y);
                             return true;
                         }
                         else
@@ -547,6 +642,8 @@ bool Pawn::move(string pos, vector<piece*> piese) {
                                 {
                                     cout << "En Passant!\n";
                                     position = pos;
+                                    pos_to_int(x, y, this->position);
+                                    this->piece_sprite.setPosition(x, y);
                                     return true;
                                 }
                         //throw e_p;
@@ -563,6 +660,8 @@ bool Pawn::move(string pos, vector<piece*> piese) {
                             has_moved = true;
                             en_passant = false;
                             position = pos;
+                            pos_to_int(x, y, this->position);
+                            this->piece_sprite.setPosition(x, y);
                             return true;
                         }
                         else
@@ -571,6 +670,8 @@ bool Pawn::move(string pos, vector<piece*> piese) {
                                 {
                                     cout << "En Passant!\n";
                                     position = pos;
+                                    pos_to_int(x, y, this->position);
+                                    this->piece_sprite.setPosition(x, y);
                                     return true;
                                 }
                     }
@@ -597,6 +698,8 @@ bool Pawn::move(string pos, vector<piece*> piese) {
                     has_moved = true;
                     en_passant = true;
                     position = pos;
+                    pos_to_int(x, y, this->position);
+                    this->piece_sprite.setPosition(x, y);
                     return true;
                 }
             }
@@ -616,12 +719,16 @@ bool Pawn::move(string pos, vector<piece*> piese) {
                             {
                                 cout << "En Passant!\n";
                                 position = pos;
+                                pos_to_int(x, y, this->position);
+                                this->piece_sprite.setPosition(x, y);
                                 return true;
                             }
                 }
                 has_moved = true;
                 en_passant = false;
                 position = pos;
+                pos_to_int(x, y, this->position);
+                this->piece_sprite.setPosition(x, y);
                 return true;
             }
             else
@@ -637,6 +744,8 @@ bool Pawn::move(string pos, vector<piece*> piese) {
                                 position = pos;
                                 en_passant = false;
                                 has_moved = true;
+                                pos_to_int(x, y, this->position);
+                                this->piece_sprite.setPosition(x, y);
                                 return true;
                             }
                             else
@@ -645,6 +754,8 @@ bool Pawn::move(string pos, vector<piece*> piese) {
                                     {
                                         cout << "En Passant!\n";
                                         position = pos;
+                                        pos_to_int(x, y, this->position);
+                                        this->piece_sprite.setPosition(x, y);
                                         return true;
                                     }
                         }
@@ -660,6 +771,8 @@ bool Pawn::move(string pos, vector<piece*> piese) {
                                 position = pos;
                                 en_passant = false;
                                 has_moved = true;
+                                pos_to_int(x, y, this->position);
+                                this->piece_sprite.setPosition(x, y);
                                 return true;
                             }
                             if (a == x && b == 5)
@@ -667,6 +780,8 @@ bool Pawn::move(string pos, vector<piece*> piese) {
                                 {
                                     cout << "En Passant!\n";
                                     position = pos;
+                                    pos_to_int(x, y, this->position);
+                                    this->piece_sprite.setPosition(x, y);
                                     return true;
                                 }
                         }
@@ -729,7 +844,10 @@ void Table::destroy(string pos)
     for (auto i : table)
     {
         if (i->Get_Position() == pos)
+        {
+            
             table.erase(table.begin() + k);
+        }
         k++;
     }
 }
