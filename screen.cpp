@@ -5,6 +5,7 @@
 ChessGame::ChessGame(sf::RenderWindow* window) {
 	this->window = window;
 	this->Draw_Table();
+	this->Set_Pieces();
 	this->Draw_Pieces();
 	this->window->display();
 }
@@ -43,6 +44,7 @@ void ChessGame::Draw_Table()
 {
 	//setfillstyle(SOLID_FILL, COLOR(31, 13, 5));
 	//floodfill(1, 1, WHITE);
+	int k = 0;
 	int r = 207, g = 168, b = 130;
 	//setcolor(COLOR(r, g, b));
 
@@ -59,7 +61,8 @@ void ChessGame::Draw_Table()
 			sf::RectangleShape patrat(sf::Vector2f(100, 100));
 			patrat.setFillColor(square_color);
 			patrat.setPosition(sf::Vector2f(j * 100, i * 100));
-			this->window->draw(patrat);
+			this->window->draw(patrat); k++;
+			//cout << "Am desenat patratul " << k << endl;
 		}
 	}
 
@@ -91,23 +94,26 @@ void ChessGame::Draw_Table()
 void ChessGame::pos_to_int(int& x, int& y, string pos)
 {
 	x = int(pos[0] - 'a');
-	x = x * 100 + 50;
+	x = x * 100;
 	y = int(pos[1] - '0');
-	y = 850 - y * 100;
+	y = 800 - y * 100;
 }
 
 void ChessGame::Draw_Pieces()
 {
+	//cout << "Am intrat in functie\n";
 	//setcolor(WHITE);
 	int x, y;
-	for (auto i : tabla.Get_White_Pieces())
+	for (auto piece : tabla.Get_White_Pieces())
 	{
-		char ch[5] = "W_";
+		this->window->draw(piece->Get_Sprite());
+		//cout << piece->Get_Name();
+		/*char ch[5] = "W_";
 		ch[2] = i->Get_Name()[6];
 		ch[3] = i->Get_Name()[7];
 		ch[4] = NULL;
-		pos_to_int(x, y, i->Get_Position());
-		if (((x + y - 100) / 100) % 2 == 0)
+		pos_to_int(x, y, i->Get_Position());*/
+		/*if (((x + y - 100) / 100) % 2 == 0)
 		{
 			setbkcolor(COLOR(31, 13, 5));
 			setcolor(COLOR(207, 168, 130));
@@ -117,17 +123,19 @@ void ChessGame::Draw_Pieces()
 			setbkcolor(COLOR(207, 168, 130));
 			setcolor(COLOR(31, 13, 5));
 		}
-		outtextxy(x - textwidth(ch) / 2, y - textheight(ch) / 2, ch);
+		outtextxy(x - textwidth(ch) / 2, y - textheight(ch) / 2, ch);*/
 	}
 
-	for (auto i : tabla.Get_Black_Pieces())
+	for (auto piece : tabla.Get_Black_Pieces())
 	{
-		char ch[5] = "B_";
+		this->window->draw(piece->Get_Sprite());
+		//cout << piece->Get_Name();
+		/*char ch[5] = "B_";
 		ch[2] = i->Get_Name()[6];
 		ch[3] = i->Get_Name()[7];
 		ch[4] = NULL;
-		pos_to_int(x, y, i->Get_Position());
-		if (((x + y - 100) / 100) % 2 == 0)
+		pos_to_int(x, y, i->Get_Position());*/
+		/*if (((x + y - 100) / 100) % 2 == 0)
 		{
 			setbkcolor(COLOR(31, 13, 5));
 			setcolor(COLOR(207, 168, 130));
@@ -137,7 +145,7 @@ void ChessGame::Draw_Pieces()
 			setbkcolor(COLOR(207, 168, 130));
 			setcolor(COLOR(31, 13, 5));
 		}
-		outtextxy(x - textwidth(ch) / 2, y - textheight(ch) / 2, ch);
+		outtextxy(x - textwidth(ch) / 2, y - textheight(ch) / 2, ch);*/
 	}
 
 	//window->display();
